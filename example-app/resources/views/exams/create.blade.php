@@ -7,6 +7,6 @@
     <title>exam</title>
 </head>
 <body>
-    
+    <h1>Exam create</h1>
 </body>
 </html>

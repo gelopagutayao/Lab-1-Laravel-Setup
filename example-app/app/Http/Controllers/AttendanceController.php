@@ -10,45 +10,23 @@ class AttendanceController extends Controller
 {
     public function index()
     {
-        $attendances = Attendance::with('student')->get();
-        return response()->json($attendances);
+        return view('attendance.index');  
     }
 
-    public function store(Request $request)
+    public function create()
     {
-        $request->validate([
-            'student_id' => 'required|exists:students,id',
-            'date' => 'required|date',
-            'status' => 'required|boolean',
-            'remark' => 'nullable|string',
-        ]);
-
-        $attendance = Attendance::create($request->all());
-        return response()->json($attendance, 201);
-    }
-
-    public function show($id)
-    {
-        $attendance = Attendance::with('student')->findOrFail($id);
-        return response()->json($attendance);
+        return view('attendance.create');
     }
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'status' => 'required|boolean',
-            'remark' => 'nullable|string',
-        ]);
-
-        $attendance = Attendance::findOrFail($id);
-        $attendance->update($request->all());
-        return response()->json($attendance);
+        return view('attendance.edit');
     }
-
-    public function destroy($id)
+    
+    public function delete(Request $request, $id)
     {
-        $attendance = Attendance::findOrFail($id);
-        $attendance->delete();
-        return response()->json(null, 204);
+        return view('attendance.delete');
     }
+
+    
 }

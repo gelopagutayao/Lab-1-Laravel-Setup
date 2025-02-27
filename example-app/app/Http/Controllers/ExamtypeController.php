@@ -9,43 +9,21 @@ class ExamTypeController extends Controller
 {
     public function index()
     {
-        $examTypes = ExamType::all();
-        return response()->json($examTypes);
+        return view('examtypes.index');  
     }
 
-    public function store(Request $request)
+    public function create()
     {
-        $request->validate([
-            'name' => 'required|string|max:45',
-            'desc' => 'nullable|string|max:45',
-        ]);
-
-        $examType = ExamType::create($request->all());
-        return response()->json($examType, 201);
-    }
-
-    public function show($id)
-    {
-        $examType = ExamType::findOrFail($id);
-        return response()->json($examType);
+        return view('examtypes.create');
     }
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'sometimes|string|max:45',
-            'desc' => 'sometimes|string|max:45',
-        ]);
-
-        $examType = ExamType::findOrFail($id);
-        $examType->update($request->all());
-        return response()->json($examType);
+        return view('examtypes.edit');
     }
-
-    public function destroy($id)
+    
+    public function delete(Request $request, $id)
     {
-        $examType = ExamType::findOrFail($id);
-        $examType->delete();
-        return response()->json(null, 204);
+        return view('examtypes.delete');
     }
 }

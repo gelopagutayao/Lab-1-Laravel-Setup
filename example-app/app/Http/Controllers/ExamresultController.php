@@ -9,43 +9,21 @@ class ExamResultController extends Controller
 {
     public function index()
     {
-        $examResults = ExamResult::with(['exam', 'student'])->get();
-        return response()->json($examResults);
+        return view('examresults.index');  
     }
 
-    public function store(Request $request)
+    public function create()
     {
-        $request->validate([
-            'exam_id' => 'required|exists:exams,id',
-            'student_id' => 'required|exists:students,id',
-            'marks' => 'required|string|max:45',
-        ]);
-
-        $examResult = ExamResult::create($request->all());
-        return response()->json($examResult, 201);
-    }
-
-    public function show($id)
-    {
-        $examResult = ExamResult::with(['exam', 'student'])->findOrFail($id);
-        return response()->json($examResult);
+        return view('examresults.create');
     }
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'marks' => 'required|string|max:45',
-        ]);
-
-        $examResult = ExamResult::findOrFail($id);
-        $examResult->update($request->all());
-        return response()->json($examResult);
+        return view('examresults.edit');
     }
-
-    public function destroy($id)
+    
+    public function delete(Request $request, $id)
     {
-        $examResult = ExamResult::findOrFail($id);
-        $examResult->delete();
-        return response()->json(null, 204);
+        return view('examresults.delete');
     }
 }

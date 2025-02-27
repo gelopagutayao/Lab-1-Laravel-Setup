@@ -7,33 +7,24 @@ use App\Models\ClassroomStudent;
 
 class ClassroomstudentController extends Controller
 {
+   
     public function index()
     {
-        $classroomStudents = ClassroomStudent::with(['classroom', 'student'])->get();
-        return response()->json($classroomStudents);
+        return view('classroomstudents.index');  
     }
 
-    public function store(Request $request)
+    public function create()
     {
-        $request->validate([
-            'classroom_id' => 'required|exists:classrooms,id',
-            'student_id' => 'required|exists:students,id',
-        ]);
-
-        $classroomStudent = ClassroomStudent::create($request->all());
-        return response()->json($classroomStudent, 201);
+        return view('classroomstudents.create');
     }
 
-    public function show($id)
+    public function update(Request $request, $id)
     {
-        $classroomStudent = ClassroomStudent::with(['classroom', 'student'])->findOrFail($id);
-        return response()->json($classroomStudent);
+        return view('classroomstudents.edit');
     }
-
-    public function destroy($id)
+    
+    public function delete(Request $request, $id)
     {
-        $classroomStudent = ClassroomStudent::findOrFail($id);
-        $classroomStudent->delete();
-        return response()->json(null, 204);
+        return view('classroomstudents.delete');
     }
 }
