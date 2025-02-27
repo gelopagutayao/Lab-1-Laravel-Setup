@@ -36,7 +36,7 @@ return new class extends Migration {
             $table->timestamps();
         });
 
-        Schema::create('parents', function (Blueprint $table) { // ✅ Moved above students
+        Schema::create('parents', function (Blueprint $table) { 
             $table->id();
             $table->string('email', 45)->unique();
             $table->string('password', 45);
@@ -73,7 +73,7 @@ return new class extends Migration {
             $table->date('dob');
             $table->string('phone', 15)->nullable();
             $table->string('mobile', 15)->nullable();
-            $table->unsignedBigInteger('parent_id')->nullable(); // ✅ Ensure it's nullable
+            $table->unsignedBigInteger('parent_id')->nullable(); 
             $table->date('date_of_join')->nullable();
             $table->boolean('status')->default(true);
             $table->timestamp('last_login_date')->nullable();
