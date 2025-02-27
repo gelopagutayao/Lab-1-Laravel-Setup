@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Classroom;  // Assuming you name the model Classroom
+use App\Models\Classroom;
 use Illuminate\Http\Request;
 
 class ClassroomController extends Controller
@@ -10,16 +10,16 @@ class ClassroomController extends Controller
     // Display a listing of classrooms (READ)
     public function index()
     {
-        $classrooms = Classroom::with(['grade', 'teacher'])->get();  // Retrieves all classrooms, including related grade and teacher data
-        return view('classrooms.index', compact('classrooms'));  // Assuming you have a 'classrooms.index' view
+        $classrooms = Classroom::with(['grade', 'teacher'])->get();
+        return view('classrooms.courses.index', compact('classrooms'));
     }
 
     // Show the form for creating a new classroom (CREATE)
     public function create()
     {
-        $grades = \App\Models\Grade::all();  // Get all grades for the select dropdown
-        $teachers = \App\Models\Teacher::all();  // Get all teachers for the select dropdown
-        return view('classrooms.create', compact('grades', 'teachers'));  // Assuming you have a 'classrooms.create' view for the form
+        $grades = \App\Models\Grade::all();
+        $teachers = \App\Models\Teacher::all();
+        return view('classrooms.create', compact('grades', 'teachers'));
     }
 
     // Store a newly created classroom in storage (CREATE)
@@ -43,23 +43,23 @@ class ClassroomController extends Controller
             'teacher_id' => $request->teacher_id,
         ]);
 
-        return redirect()->route('classrooms.index')->with('success', 'Classroom created successfully!');
+        return redirect()->route('classrooms.courses.index')->with('success', 'Classroom created successfully!');
     }
 
     // Display the specified classroom (READ)
     public function show($id)
     {
-        $classroom = Classroom::with(['grade', 'teacher'])->findOrFail($id);  // Get classroom by ID, including related grade and teacher
-        return view('classrooms.show', compact('classroom'));  // Assuming you have a 'classrooms.show' view
+        $classroom = Classroom::with(['grade', 'teacher'])->findOrFail($id);
+        return view('classrooms.show', compact('classroom'));
     }
 
     // Show the form for editing the specified classroom (UPDATE)
     public function edit($id)
     {
-        $classroom = Classroom::findOrFail($id);  // Get classroom by ID
-        $grades = \App\Models\Grade::all();  // Get all grades for the select dropdown
-        $teachers = \App\Models\Teacher::all();  // Get all teachers for the select dropdown
-        return view('classrooms.edit', compact('classroom', 'grades', 'teachers'));  // Assuming you have a 'classrooms.edit' view
+        $classroom = Classroom::findOrFail($id);
+        $grades = \App\Models\Grade::all();
+        $teachers = \App\Models\Teacher::all();
+        return view('classrooms.edit', compact('classroom', 'grades', 'teachers'));
     }
 
     // Update the specified classroom in storage (UPDATE)
@@ -74,7 +74,7 @@ class ClassroomController extends Controller
             'teacher_id' => 'required|exists:teachers,id',
         ]);
 
-        $classroom = Classroom::findOrFail($id);  // Get classroom by ID
+        $classroom = Classroom::findOrFail($id);
         $classroom->update([
             'year' => $request->year,
             'grade_id' => $request->grade_id,
@@ -84,15 +84,16 @@ class ClassroomController extends Controller
             'teacher_id' => $request->teacher_id,
         ]);
 
-        return redirect()->route('classrooms.index')->with('success', 'Classroom updated successfully!');
+        return redirect()->route('classrooms.courses.index')->with('success', 'Classroom updated successfully!');
     }
+
 
     // Remove the specified classroom from storage (DELETE)
     public function destroy($id)
     {
-        $classroom = Classroom::findOrFail($id);  // Get classroom by ID
-        $classroom->delete();  // Delete the classroom
+        $classroom = Classroom::findOrFail($id);
+        $classroom->delete();
 
-        return redirect()->route('classrooms.index')->with('success', 'Classroom deleted successfully!');
+        return redirect()->route('classrooms.courses.index')->with('success', 'Classroom deleted successfully!');
     }
 }

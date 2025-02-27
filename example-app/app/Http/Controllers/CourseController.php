@@ -6,7 +6,7 @@ use App\Models\Course;
 use App\Models\Grade;
 use Illuminate\Http\Request;
 
-class CourseController extends Controller
+class Coursecontroller extends Controller
 {
     // Display a listing of courses (READ)
     public function index()

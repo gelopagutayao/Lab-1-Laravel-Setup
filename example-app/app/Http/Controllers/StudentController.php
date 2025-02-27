@@ -7,96 +7,51 @@ use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
+    // Display a listing of the students
     public function index()
     {
         // Retrieve all students from the database
         $students = Student::all();
+
+        // Return the 'students.index' view with the list of students
         return view('students.index', compact('students'));
     }
 
+    // Method to display the create form
     public function create()
     {
-        return view('students.create'); // Return view with a form to create a student
+        return view('students.create');
     }
 
     public function store(Request $request)
     {
-        // Validate and store the student
-        $request->validate([
-            'fname' => 'required|string|max:45',
-            'lname' => 'required|string|max:45',
-            'email' => 'required|email|max:45|unique:students,email',
-            'password' => 'required|string|min:8|max:45', // Password validation
+        // Validate the request data
+        $validated = $request->validate([
+            'fname' => 'required|string|max:255',
+            'lname' => 'required|string|max:255',
+            'email' => 'required|email|unique:students,email|max:255',
+            'password' => 'required|string|min:8',
             'dob' => 'required|date',
             'phone' => 'nullable|string|max:15',
             'mobile' => 'nullable|string|max:15',
-            'parent_id' => 'nullable|exists:parents,id', // Ensure parent exists if provided
-            'date_of_join' => 'nullable|date',
+            'parent_id' => 'nullable|integer|exists:parents,id',
             'status' => 'nullable|boolean',
         ]);
 
-        // Create new student record
-        Student::create([
-            'fname' => $request->fname,
-            'lname' => $request->lname,
-            'email' => $request->email,
-            'password' => bcrypt($request->password), // Encrypt password
-            'dob' => $request->dob,
-            'phone' => $request->phone,
-            'mobile' => $request->mobile,
-            'parent_id' => $request->parent_id,
-            'date_of_join' => $request->date_of_join,
-            'status' => $request->status ?? true, // Default status to true
-        ]);
+        // Create a new student
+        $student = new Student();
+        $student->fname = $validated['fname'];
+        $student->lname = $validated['lname'];
+        $student->email = $validated['email'];
+        $student->password = bcrypt($validated['password']); // Hash the password
+        $student->dob = $validated['dob'];
+        $student->phone = $validated['phone'];
+        $student->mobile = $validated['mobile'];
+        $student->parent_id = $validated['parent_id'];
+        $student->status = $validated['status'] ?? true; // Default to active if not provided
+        $student->save();
 
-        return redirect('/students'); // Redirect to the index page
-    }
-
-    public function edit($id)
-    {
-        $student = Student::findOrFail($id); // Find student by ID
-        return view('students.edit', compact('student')); // Return edit form with student data
-    }
-
-    public function update(Request $request, $id)
-    {
-        // Validate the input
-        $request->validate([
-            'fname' => 'required|string|max:45',
-            'lname' => 'required|string|max:45',
-            'email' => 'required|email|max:45|unique:students,email,' . $id, // Ensure unique email for update
-            'password' => 'nullable|string|min:8|max:45', // Password validation (nullable for updates)
-            'dob' => 'required|date',
-            'phone' => 'nullable|string|max:15',
-            'mobile' => 'nullable|string|max:15',
-            'parent_id' => 'nullable|exists:parents,id', // Ensure parent exists if provided
-            'date_of_join' => 'nullable|date',
-            'status' => 'nullable|boolean',
-        ]);
-
-        $student = Student::findOrFail($id); // Find student by ID
-
-        // Update student data
-        $student->update([
-            'fname' => $request->fname,
-            'lname' => $request->lname,
-            'email' => $request->email,
-            'password' => $request->password ? bcrypt($request->password) : $student->password, // Update password only if provided
-            'dob' => $request->dob,
-            'phone' => $request->phone,
-            'mobile' => $request->mobile,
-            'parent_id' => $request->parent_id,
-            'date_of_join' => $request->date_of_join,
-            'status' => $request->status ?? true, // Default status to true if not provided
-        ]);
-
-        return redirect('/students'); // Redirect to the students index page
-    }
-
-    public function destroy($id)
-    {
-        $student = Student::findOrFail($id); // Find student by ID
-        $student->delete(); // Delete student
-        return redirect('/students'); // Redirect to the index page
+        // Redirect to student list with a success message
+        return redirect()->route('students.index')->with('success', 'Student created successfully!');
     }
 }

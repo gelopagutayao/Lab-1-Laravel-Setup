@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\ParentModel;  // Assuming you name the model ParentModel
+use App\Models\ParentModel; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+
+
 
 class ParentController extends Controller
 {
